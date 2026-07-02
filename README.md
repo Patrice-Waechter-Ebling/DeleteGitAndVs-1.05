@@ -42,3 +42,25 @@
           CompteCibleW(rootW);
       }
 <img width="1366" height="720" alt="image" src="https://github.com/user-attachments/assets/14ea3699-3ea4-465d-959d-71960ad19043" />
+### Deassemblage
+    push    ecx
+    lea     ecx, [esp] + 8 - 4 
+    sub     ecx, eax 
+    sbb     eax, eax 
+    not     eax
+    and     ecx, eax
+    mov     eax, esp
+    and     eax, not ( _PAGESIZE_ - 1)
+    cs10:
+    cmp     ecx, eax
+    jb      short cs20    
+    mov     eax, ecx  
+    pop     ecx
+    xchg    esp, eax    
+    mov     eax, dword ptr [eax]  
+    mov     dword ptr [esp], eax  
+    ret
+    cs20:
+    sub     eax, _PAGESIZE_ 
+    test    dword ptr [eax],eax 
+    jmp     short cs10
